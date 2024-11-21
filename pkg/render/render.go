@@ -3,6 +3,7 @@ package render
 import (
 	"bytes"
 	"fmt"
+	"github.com/justinas/nosurf"
 	"github.com/natib21/bookings/pkg/config"
 	"github.com/natib21/bookings/pkg/models"
 	"html/template"
@@ -19,7 +20,12 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func RenderTemplate(res http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func AddDefaultData(td *models.TemplateData, req *http.Request) *models.TemplateData {
+	td.CSRFToken = nosurf.Token(req)
+	return td
+}
+
+func RenderTemplate(res http.ResponseWriter, req *http.Request, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 	if app.UseCache {
 		tc = app.TemplateCache
@@ -32,6 +38,8 @@ func RenderTemplate(res http.ResponseWriter, tmpl string, td *models.TemplateDat
 		log.Fatal("Couid not get template from template cache")
 	}
 	buf := new(bytes.Buffer)
+
+	td = AddDefaultData(td, req)
 
 	err := t.Execute(buf, td)
 	if err != nil {
