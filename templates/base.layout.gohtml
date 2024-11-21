@@ -94,10 +94,6 @@
     {{end}}
 
 
-
-
-
-
     <div class="row my-footer">
         <div class="col">Left</div>
         <div class="col">Middle</div>
@@ -140,8 +136,6 @@
         let attention = showPrompt()
 
 
-
-
         function notify(msg, msgType) {
             notie.alert({
                 type: msgType,
@@ -157,7 +151,6 @@
                 confirmButtonText: confirmationButton
             })
         }
-
 
 
         function showPrompt() {
@@ -216,19 +209,16 @@
                     msg = "",
                     title = "",
                 } = c;
-                const {value: formValues} = await Swal.fire({
+                const {value: result} = await Swal.fire({
                     title: title,
                     html: msg,
                     backdrop: false,
                     focusConfirm: false,
                     showCancelButton: true,
-                    willOpen:()=>{
-                        const elem = document.getElementById("reservation-dates-modal");
-                        const rp = new DateRangePicker(elem,{
-                            format: 'yyyy-mm-dd',
-                            showOnFocus:true,
-
-                        })
+                    willOpen: () => {
+                       if(c.willOpen !== undefined){
+                           c.willOpen()
+                       }
                     },
                     preConfirm: () => {
                         return [
@@ -236,13 +226,24 @@
                             document.getElementById("end").value
                         ];
                     },
-                    didOpen:() =>{
-                        document.getElementById('start').removeAttribute('disabled')
-                        document.getElementById('end').removeAttribute('disabled')
+                    didOpen: () => {
+                     if(c.didOpen !== undefined){
+                         c.didOpen()
+                     }
                     }
                 });
-                if (formValues) {
-                    Swal.fire(JSON.stringify(formValues));
+                if (result) {
+                    if (result.dismiss !== Swal.DismissReason.cancel) {
+                        if (result.value !== "") {
+                            if (c.callback !== undefined) {
+                                c.callback(result)
+                            } else {
+                                c.callback(false)
+                            }
+                        }
+                    } else {
+                        c.callback(false)
+                    }
                 }
             };
 
