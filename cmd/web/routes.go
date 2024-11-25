@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/natib21/bookings/pkg/config"
-	"github.com/natib21/bookings/pkg/handlers"
+	"github.com/natib21/bookings/internal/config"
+	"github.com/natib21/bookings/internal/handlers"
 	"net/http"
 )
 

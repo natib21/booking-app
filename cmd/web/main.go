@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/alexedwards/scs/v2"
-	"github.com/natib21/bookings/pkg/config"
-	"github.com/natib21/bookings/pkg/handlers"
-	"github.com/natib21/bookings/pkg/render"
+	"github.com/natib21/bookings/internal/config"
+	"github.com/natib21/bookings/internal/handlers"
+	"github.com/natib21/bookings/internal/render"
 	"log"
 	"net/http"
 	"time"

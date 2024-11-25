@@ -3,9 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/natib21/bookings/pkg/config"
-	"github.com/natib21/bookings/pkg/models"
-	"github.com/natib21/bookings/pkg/render"
+	"github.com/natib21/bookings/internal/config"
+	"github.com/natib21/bookings/internal/models"
+	"github.com/natib21/bookings/internal/render"
 	"log"
 	"net/http"
 )
@@ -68,18 +68,25 @@ type jsonRes struct {
 }
 
 func (m *Repository) AvailibilityJson(res http.ResponseWriter, req *http.Request) {
+
 	resp := jsonRes{
 		Ok:      true,
 		Message: "Available",
 	}
 	out, err := json.MarshalIndent(resp, "", "     ")
+
 	if err != nil {
 		log.Println(err)
 	}
+
 	log.Println("Response:", string(out)) // Optional for debugging
+
 	res.Header().Set("Content-Type", "application/json")
+
 	res.WriteHeader(http.StatusOK)
+
 	res.Write(out)
+
 }
 func (m *Repository) Contact(res http.ResponseWriter, req *http.Request) {
 	render.RenderTemplate(res, req, "contact.page.gohtml", &models.TemplateData{})
